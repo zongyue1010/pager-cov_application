@@ -1,0 +1,8 @@
+1. extract the common pathways and distinct pathways among all selected samples
+2. generate PAG-PAG network of m-type and r-type 
+2.1 back end on-the-fly or retrieved PAG-PAG network retrieval
+2.2 api construction
+
+3. create customer uploaded folder in performing the same analysis
+
+1 minute video in COVID-19 data analysis

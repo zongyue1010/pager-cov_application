@@ -1,0 +1,19 @@
+# 1. ref: https://devcenter.heroku.com/articles/getting-started-with-python#set-up
+create heroku
+https://warm-woodland-88984.herokuapp.com/ | https://git.heroku.com/warm-woodland-88984.git
+
+git push heroku main
+
+# git initialize
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/zongyue1010/pager-cov_application.git
+git push -u origin main
+# git push 
+git remote add origin https://github.com/zongyue1010/pager-cov_application.git
+git branch -M main
+git push -u origin main
+
+

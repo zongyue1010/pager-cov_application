@@ -1,0 +1,6 @@
+Sample	Number	Condition	Description
+A549_Mock	13	Control	Independent biological triplicates of transformed lung alveolar (A549) cells were mock treated.
+A549_SARS_CoV_2	6	Case	Infected with SARS-CoV-2 (USA-WA1/2020).
+A549_RSV	5	Case	Infected with RSV (A2 strain). 
+A549_IAV	2	Case	Infected with IAV (A/Puerto Rico/8/1934 (H1N1)).
+A549_HPIV3	3	Case	Infected with HPIV3.
