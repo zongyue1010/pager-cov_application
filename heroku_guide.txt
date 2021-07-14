@@ -4,6 +4,9 @@ https://warm-woodland-88984.herokuapp.com/ | https://git.heroku.com/warm-woodlan
 
 git push heroku main
 
+# unset heroku buildback
+heroku config:unset BUILDPACK_URL
+
 # git initialize
 git init
 git add README.md
