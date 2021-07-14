@@ -1,6 +1,7 @@
 # 1. ref: https://devcenter.heroku.com/articles/getting-started-with-python#set-up
 create heroku
-https://warm-woodland-88984.herokuapp.com/ | https://git.heroku.com/warm-woodland-88984.git
+https://pager-cov-app.herokuapp.com/
+heroku apps:rename pager-cov-app
 
 git push heroku main
 

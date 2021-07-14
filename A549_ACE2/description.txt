@@ -1,4 +1,4 @@
 Sample	Number	Condition	Description
-A549_ACE2_Mock	6	Case	Independent biological triplicates of transformed lung alveolar (A549) transduced with a vector expressing human ACE2 were mock treated.
+A549_ACE2_Mock	6	Control	Independent biological triplicates of transformed lung alveolar (A549) transduced with a vector expressing human ACE2 were mock treated.
 A549_ACE2_SARS_CoV_2	6	Case	Infected with SARS-CoV-2 (USA-WA1/2020).
 A549_ACE2_SARS_CoV_2_Rux	3	Case	Pre-treated with Ruxolitinib (500 nM).
