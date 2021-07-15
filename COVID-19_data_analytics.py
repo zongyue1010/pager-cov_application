@@ -233,8 +233,8 @@ sources = st.sidebar.multiselect('Available Data Sources',
 
 
 olap = st.sidebar.text_input("Overlap ≥", 1)
-sim = st.sidebar.slider('Similarity score ≥', 0.0, 1.0, 0.1, 0.01)
-fdr = st.sidebar.slider('-log2-based FDR Cutoff', 0, 300, 6, 1)
+sim = st.sidebar.slider('Similarity score ≥', 0.0, 1.0, 0.05, 0.01)
+fdr = st.sidebar.slider('-log2-based FDR Cutoff', 0, 300, 15, 1)
 fdr = np.power(2,-np.float64(fdr))
 
 # modified PAG enrichment
@@ -305,10 +305,12 @@ for pag_idx in range(0,len(pag_ids)):
 #"A549_ACE2_SARS_CoV_2","A549_ACE2_SARS_CoV_2_Rux",
 #"Calu3_SARS_CoV_2"]
 
+
 orderExpect = treatment_data['Sample'].tolist()[1:]
 orderIdx = [sampleNames.index(i) for i in orderExpect]
+
 plt = Heatmap.generateHeatmap(np.array(mtx)[::,orderIdx],np.array(deg_names)[orderIdx],pag_ids,colCluster=True)
-st.pyplot(plt,caption='Sample-PAG association')
+st.pyplot(plt)
 
 #st.header('Section 4 out of 5: Generate the heatmap of the samples\' DEG enrichment result (' + str(len(pag_ids)) + ' PAGs)')
 #from PIL import Image

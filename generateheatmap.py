@@ -23,25 +23,19 @@ from matplotlib import rcParams
 
 class generateHeatmap():
     def __new__(self,mtx,deg_names,pag_ids,**kwargs):
-        #matplotlib.use('Agg')
-        # Plot it out
-        #fig = plt.figure()
-        
-        length = len(pag_ids)*0.43+1
-        #print(length)
-        fig, ax = plt.subplots(figsize=(5, length))
-        
+        plt.figure(figsize=(5,30))
         # parameters in the heatmap setting 
         width_ratio = 0.8
+        annotationSize = 6
+        font_size = 12
         if 'width_ratio' in kwargs.keys():
-            width_ratio = kwargs['width_ratio']
-        
-        annotationSize = 5
+            width_ratio = kwargs['width_ratio']      
         if 'annotationSize' in kwargs.keys():
             annotationSize = kwargs['annotationSize']
             
         outputdir = kwargs['outputdir'] if 'outputdir' in kwargs.keys() else ""
-        
+               
+        #fig, ax = plt.subplots(figsize=(5/len(pag_ids), length))
         col_linkage = hc.linkage(sp.distance.pdist(mtx.T), method='ward')
         row_linkage = hc.linkage(sp.distance.pdist(mtx), method='ward')
         
@@ -70,51 +64,48 @@ class generateHeatmap():
         expMtxsDF = pd.DataFrame(mtx)
         expMtxsDF.columns = deg_names
         expMtxsDF.index = pag_ids
-        #sns.set(font_scale=1,rc={'figure.figsize':(3,8.27)})
-        
-        #print(expMtxsDF)
-        
+        sns.set(font_scale=1,rc={'figure.figsize':(3,20)})
+                
         print('rowCluster' in kwargs.keys() & 'colCluster' in kwargs.keys())
         if('rowCluster' in kwargs.keys() & 'colCluster' in kwargs.keys()): 
-            g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,col_linkage=col_linkage,row_linkage=row_linkage,
-                          annot=True,annot_kws={"size": 10},cbar_kws={'label':10 })        
+            g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,col_linkage=col_linkage,row_linkage=row_linkage,  yticklabels=True,
+                          annot=True,annot_kws={"size": annotationSize})        
         elif('rowCluster' in kwargs.keys()): 
-            g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,row_linkage=row_linkage,
-                          annot=True,annot_kws={"size": 10},cbar_kws={'label':10 })
+            g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,row_linkage=row_linkage,  yticklabels=True,
+                          annot=True,annot_kws={"size": annotationSize})
         elif('colCluster' in kwargs.keys()): 
-            g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,col_linkage=col_linkage,
-                          annot=True,annot_kws={"size": 10},cbar_kws=dict(use_gridspec=False,pad=0.01,shrink=0.15,label=10,orientation='horizontal'))  
+            g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,col_linkage=col_linkage,  yticklabels=True,
+                          annot=True,annot_kws={"size": annotationSize})  
         else:
-            g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,row_cluster=False,
-                          annot=True,annot_kws={"size": 10},cbar_kws={'label':10 })  
-            #g.ax_row_dendrogram.set_xlim([0,0])
-            
+            g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,row_cluster=False,  yticklabels=True,
+                          annot=True,annot_kws={"size": annotationSize})  
+            #g.ax_row_dendrogram.set_xlim([0,0]) 
         #plt.subplots_adjust(top=0.9) # make room to fit the colorbar into the figure
-        rotation = 90 
-        g.ax_heatmap.set_xticklabels(g.ax_heatmap.get_xmajorticklabels(), fontsize = 10)
-        g.ax_heatmap.set_yticklabels(g.ax_heatmap.get_ymajorticklabels(), fontsize = 10)
-        plt.setp(g.ax_heatmap.yaxis.get_majorticklabels(), rotation=0, fontsize=10)
-        plt.setp(g.ax_heatmap.xaxis.get_majorticklabels(), rotation=90, fontsize=10)
+        ### rotation of labels of x-axis and y-axis
+        plt.setp(g.ax_heatmap.yaxis.get_majorticklabels(), rotation=0, fontsize= font_size)
+        plt.setp(g.ax_heatmap.xaxis.get_majorticklabels(), rotation=90, fontsize= font_size-2)
         hm = g.ax_heatmap.get_position()
+        scale_factor = len(pag_ids)/40
         # to change the legends location
-        
-        
-        g.ax_heatmap.set_position([hm.x0, hm.y0, hm.width*width_ratio, hm.height])
+        g.ax_heatmap.set_position([hm.x0*scale_factor, hm.y0*scale_factor, hm.width*width_ratio*scale_factor, hm.height*scale_factor])
         col = g.ax_col_dendrogram.get_position()
-        g.ax_col_dendrogram.set_position([col.x0, col.y0, col.width*width_ratio, col.height*0.5])
+        g.ax_col_dendrogram.set_position([col.x0*scale_factor, col.y0*scale_factor, col.width*width_ratio*scale_factor, col.height*0.5]) #
+        row = g.ax_row_dendrogram.get_position()
+        g.ax_row_dendrogram.set_position([row.x0*scale_factor, row.y0*scale_factor, row.width*scale_factor, row.height*scale_factor]) #
         #for i, ax in enumerate(g.fig.axes):   ## getting all axes of the fig object
         #    ax.set_xticklabels(ax.get_xticklabels(), rotation = rotation)
+        ### color bar position and title ref: https://stackoverflow.com/questions/67909597/seaborn-clustermap-colorbar-adjustment
+        ### color bar position adjustment
+        x0, _y0, _w, _h = g.cbar_pos
+        g.ax_cbar.set_position([x0, _y0*scale_factor+0.1, row.width, 0.05])
+        g.ax_cbar.set_title('-log2 FDR') 
         
         bottom, top = g.ax_heatmap.get_ylim()
         
-        #g.ax_heatmap.set_ylim(bottom + 0.5, top - 0.5)
-        #g.legend(bbox_to_anchor= (1.2,1))
-        #leg = g._legend
-        #leg.set_bbox_to_anchor([0.5, 0.5])  # coordinates of lower left of bounding box
-        #leg._loc = 2  # if required you can set the loc
         plt.rcParams["axes.grid"] = False
-        
-        plt.show()
+        plt.rcParams["figure.figsize"] = [20,plt.rcParams["figure.figsize"][1]]
+        plt.tight_layout()      
+        #plt.show()
         
         
         ## create heatmap using imshow
@@ -151,7 +142,7 @@ class generateHeatmap():
 ##            for j in range(len(deg_names)):
 ##                text = ax.text(j, i, mtx[i, j],ha="center", va="center", color="w")
         #ax.set_title("sample-PAG associations")
-
+        
         return(plt)
 if __name__ == '__main__':
     generateHeatmap()
