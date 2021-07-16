@@ -36,7 +36,8 @@ class generateHeatmap():
         outputdir = kwargs['outputdir'] if 'outputdir' in kwargs.keys() else ""
                
         #fig, ax = plt.subplots(figsize=(5/len(pag_ids), length))
-        col_linkage = hc.linkage(sp.distance.pdist(mtx.T), method='ward')
+        col_linkage = hc.linkage(sp.distance.pdist(mtx.T), method='average')
+
         row_linkage = hc.linkage(sp.distance.pdist(mtx), method='ward')
         
         # load the color scale using the cm
@@ -71,10 +72,10 @@ class generateHeatmap():
             g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,col_linkage=col_linkage,row_linkage=row_linkage,  yticklabels=True,
                           annot=True,annot_kws={"size": annotationSize})        
         elif('rowCluster' in kwargs.keys()): 
-            g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,row_linkage=row_linkage,  yticklabels=True,
+            g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,col_cluster=False,row_linkage=row_linkage, yticklabels=True,
                           annot=True,annot_kws={"size": annotationSize})
         elif('colCluster' in kwargs.keys()): 
-            g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,col_linkage=col_linkage,  yticklabels=True,
+            g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,col_linkage=col_linkage,row_cluster=False,  yticklabels=True,
                           annot=True,annot_kws={"size": annotationSize})  
         else:
             g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,row_cluster=False,  yticklabels=True,

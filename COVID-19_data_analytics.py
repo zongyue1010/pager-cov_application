@@ -188,7 +188,7 @@ def run_force_layout(G):
 st.header('Section 1 out of 4: Show the conditions of samples')
 treatment_data = load_treatment_data()
 st.table(treatment_data)
-
+st.markdown(get_table_download_link(pd.DataFrame(treatment_data), fileName = " "+workingdir+' sample description'), unsafe_allow_html=True)  
 
 st.header('Section 2 out of 4: Parse DEG Results')
 st.markdown("These results are from a differential gene expression (DEG) analysis performed with a custom DESeq2-based pipeline on RNAseq data located in the *Omics Data Repository*.")
@@ -309,7 +309,7 @@ for pag_idx in range(0,len(pag_ids)):
 orderExpect = treatment_data['Sample'].tolist()[1:]
 orderIdx = [sampleNames.index(i) for i in orderExpect]
 
-plt = Heatmap.generateHeatmap(np.array(mtx)[::,orderIdx],np.array(deg_names)[orderIdx],pag_ids,colCluster=True)
+plt = Heatmap.generateHeatmap(np.array(mtx)[::,orderIdx],np.array(deg_names)[orderIdx],pag_ids,rowCluster=True)
 st.pyplot(plt)
 
 #st.header('Section 4 out of 5: Generate the heatmap of the samples\' DEG enrichment result (' + str(len(pag_ids)) + ' PAGs)')
@@ -445,9 +445,13 @@ if PAGid:
                       edges=edges, 
                       config=config)
         #agraph(list(idx2symbol.values()), (PPI), config)
+        st.markdown(get_table_download_link(pd.DataFrame(PPI), fileName = ' '+sampleName+' '+str(PAGid)+' data for interactions'), unsafe_allow_html=True)
+        st.markdown(get_table_download_link(pd.DataFrame(DataE), fileName = ' '+sampleName+' '+str(PAGid)+' data for gene expressions'), unsafe_allow_html=True)        
     else:
         st.write("You select nothing.")
 
+        
+        
 ##for idx in range(0,len(degs)):
 ##    deg=degs[idx]
 ##    sampleName=deg[0]
