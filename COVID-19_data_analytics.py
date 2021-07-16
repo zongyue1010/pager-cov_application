@@ -208,7 +208,9 @@ if st.checkbox('Show DEG results table', value=True):
         deg=degs[idx]
         sampleName=deg[0]
         st.write('You selected: '+sampleName)
-        #degs[idx][1].rename(columns = {'Unnamed: 0':'symbol'}, inplace = True)
+        degs[idx][1] = degs[idx][1].drop(['symbol'], axis=1, errors='ignore')
+        degs[idx][1] = degs[idx][1].rename(columns = {"Unnamed: 0":'symbol'}) #, inplace = True
+        
         st.write(degs[idx][1])
 
 st.header('Section 3 out of 4: Run PAGER-CoV Analysis')
@@ -450,7 +452,13 @@ if PAGid:
     else:
         st.write("You select nothing.")
 
-        
+st.header('Cite:')
+st.write("PAGER-CoV analysis:")
+st.write("Zongliang Yue#, Eric Zhang#, Clark Xu, Sunny Khurana, Nishant Batra, Son Dang, and Jake Y. Chen* (2021) PAGER-CoV: A Pathway, Annotated-list and Gene-signature Electronic Repository for Coronavirus Diseases Studies. Nucleic Acids Research, Volume 49, Issue D1.")
+st.markdown("http://discovery.informatics.uab.edu/PAGER-COV/")
+st.write("Protein-Protein Interactions (PPIs) in network construction:")
+st.write("Jake Y. Chen, Ragini Pandey, and Thanh M. Nguyen, (2017) HAPPI-2: a Comprehensive and High-quality Map of Human Annotated and Predicted Protein Interactions, BMC Genomics volume 18, Article number: 182")
+st.markdown("http://discovery.informatics.uab.edu/HAPPI/")        
         
 ##for idx in range(0,len(degs)):
 ##    deg=degs[idx]
