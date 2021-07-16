@@ -307,8 +307,8 @@ for pag_idx in range(0,len(pag_ids)):
 #"A549_ACE2_SARS_CoV_2","A549_ACE2_SARS_CoV_2_Rux",
 #"Calu3_SARS_CoV_2"]
 
-
-orderExpect = treatment_data['Sample'].tolist()[1:]
+#st.write(treatment_data['Sample'])
+orderExpect = treatment_data['Sample'].tolist()[0:]
 orderIdx = [sampleNames.index(i) for i in orderExpect]
 
 plt = Heatmap.generateHeatmap(np.array(mtx)[::,orderIdx],np.array(deg_names)[orderIdx],pag_ids,rowCluster=True)

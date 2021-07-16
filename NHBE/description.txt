@@ -1,8 +1,7 @@
-Sample	Number	Condition	Description
-NHBE_Mock	7	Control	Independent biological triplicates of primary human lung epithelium (NHBE) were mock treated.
-NHBE_SARS_CoV_2	3	Case	Infected with SARS-CoV-2 (USA-WA1/2020)
-NHBE_IAV	4	Case	Infected with IAV (A/Puerto Rico/8/1934 (H1N1)).
-NHBE_IAVdNS1	4	Case	Infected with a IAV that lacks the NS1 protein (IAVdNS1).
-NHBE_IFNB_4h	2	Case	Treated with human interferon-beta for 4 hours.
-NHBE_IFNB_6h	2	Case	Treated with human interferon-beta for 6 hours.
-NHBE_IFNB_12h	2	Case	Treated with human interferon-beta for 12 hours.
+Sample	Number	Description
+NHBE_SARS_CoV_2	3	Infected with SARS-CoV-2 (USA-WA1/2020).
+NHBE_IAV	4	Infected with IAV (A/Puerto Rico/8/1934 (H1N1)).
+NHBE_IAVdNS1	4	Infected with a IAV that lacks the NS1 protein (IAVdNS1).
+NHBE_IAV_IFNB_4h	2	Treated with human interferon-beta for 4 hours.
+NHBE_IAV_IFNB_6h	2	Treated with human interferon-beta for 6 hours.
+NHBE_IAV_IFNB_12h	2	Treated with human interferon-beta for 12 hours.
