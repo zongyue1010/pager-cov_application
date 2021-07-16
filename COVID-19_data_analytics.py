@@ -233,8 +233,8 @@ sources = st.sidebar.multiselect('Available Data Sources',
 
 
 olap = st.sidebar.text_input("Overlap ≥", 1)
-sim = st.sidebar.slider('Similarity score ≥', 0.0, 1.0, 0.05, 0.01)
-fdr = st.sidebar.slider('-log2-based FDR Cutoff', 0, 300, 15, 1)
+sim = st.sidebar.slider('Similarity score ≥', 0.0, 1.0, 0.1, 0.01)
+fdr = st.sidebar.slider('-log2-based FDR Cutoff', 0, 300, 5, 1)
 fdr = np.power(2,-np.float64(fdr))
 
 # modified PAG enrichment
