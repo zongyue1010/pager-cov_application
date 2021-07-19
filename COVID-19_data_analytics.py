@@ -13,6 +13,7 @@ import plotly.tools
 import base64
 from streamlit_agraph import agraph, Node, Edge, Config
 import plotly
+import math
 
 # color mapping of the gene expression #
 from matplotlib import cm
@@ -449,20 +450,24 @@ if PAGid:
         
         #st.write(newcmp)
         max_val = max([np.abs(val) for val in carac.to_dict()["myvalue"].values()])
-        nodes = [] 
-        for i in X.nodes:             
-            #carac.to_dict()["myvalue"][str(i)]
-            nodes.append(Node(id=i, label=str(i), size=400,  
-                              color=hex_map[int( carac.to_dict()["myvalue"][i]/max_val*colorUnit)+colorUnit])
-                        ) # includes **kwargs
-        edges = [Edge(source=i, label="int", target=j,color="#d3d3d3") for (i,j) in X.edges] # includes **kwargs  type="CURVE_SMOOTH"
-        
-        return_value = agraph(nodes=nodes, 
-                      edges=edges, 
-                      config=config)
-        #agraph(list(idx2symbol.values()), (PPI), config)
-        st.markdown(get_table_download_link(pd.DataFrame(PPI), fileName = ' '+sampleName+' '+str(PAGid)+' data for interactions'), unsafe_allow_html=True)
-        st.markdown(get_table_download_link(pd.DataFrame(DataE), fileName = ' '+sampleName+' '+str(PAGid)+' data for gene expressions'), unsafe_allow_html=True)        
+        #st.write(max_val)
+        if max_val != float(0):
+            nodes = [] 
+            for i in X.nodes:             
+                #carac.to_dict()["myvalue"][str(i)]
+                nodes.append(Node(id=i, label=str(i), size=400,  
+                                  color=hex_map[int( carac.to_dict()["myvalue"][i]/max_val*colorUnit)+colorUnit])
+                            ) # includes **kwargs
+            edges = [Edge(source=i, label="int", target=j,color="#d3d3d3") for (i,j) in X.edges] # includes **kwargs  type="CURVE_SMOOTH"
+            
+            return_value = agraph(nodes=nodes, 
+                          edges=edges, 
+                          config=config)
+            #agraph(list(idx2symbol.values()), (PPI), config)
+            st.markdown(get_table_download_link(pd.DataFrame(PPI), fileName = ' '+sampleName+' '+str(PAGid)+' data for interactions'), unsafe_allow_html=True)
+            st.markdown(get_table_download_link(pd.DataFrame(DataE), fileName = ' '+sampleName+' '+str(PAGid)+' data for gene expressions'), unsafe_allow_html=True)
+        else:
+            st.write("No expression.")
     else:
         st.write("You select nothing.")
 
