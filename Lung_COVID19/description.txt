@@ -1,3 +1,0 @@
-Sample	Number	Condition	Description
-HealthyLungBiopsy	2	Control	COVID19 patient samples: Uninfected human lung biopsies were derived from one male (age 72) and one female (age 60) and used as biological replicates.
-COVID19Lung	2	Case	The lung samples derived from a single male COVID19 deceased patient (age 74) were processed in technical replicates.

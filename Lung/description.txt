@@ -1,0 +1,2 @@
+Sample	Number	Description	Series
+COVID19Lung	2	The lung samples derived from a single male COVID19 deceased patient (age 74) were processed in technical replicates.	15

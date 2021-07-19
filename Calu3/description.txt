@@ -1,3 +1,2 @@
-Sample	Number	Condition	Description
-Calu3_Mock	3	Control	The transformed lung-derived Calu-3 cells were mock treated. 
-Calu3_SARS_CoV_2	3	Case	The transformed lung-derived Calu-3 cells were infected with SARS-CoV-2 (USA-WA1/2020). 
+Sample	Number	Description	Series
+Calu3_SARS_CoV_2	3	The transformed lung-derived Calu-3 cells were infected with SARS-CoV-2 (USA-WA1/2020). 	7

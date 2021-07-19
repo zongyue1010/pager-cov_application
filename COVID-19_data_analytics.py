@@ -36,10 +36,10 @@ st.sidebar.subheader('Data')
 link = 'The COVID-19 transcriptional response data is from [GSE147507](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE147507)'
 st.sidebar.markdown(link, unsafe_allow_html=True)
 
-st.sidebar.text("1.NHBE: Primary human lung epithelium.\n2.A549: Lung alveolar.\n3.A549_ACE2:Lung alveolar (A549) transduced with a vector expressing human ACE2\n4.Calu3:The transformed lung-derived Calu-3 cells.\n5.COVID19Lung: The patient lung samples.")
+st.sidebar.text("1.NHBE: Primary human lung epithelium.\n2.A549: Lung alveolar.\n3.Calu3:The transformed lung-derived Calu-3 cells.\n4.Lung: The patient lung samples.")
 workingdir = st.sidebar.selectbox(
-    'select a cell line:',
-    tuple(['NHBE','A549','A549_ACE2','Calu3','COVID19Lung']),key='workingdir'
+    'select a cell line or tissue:',
+    tuple(['NHBE','A549','Calu3','Lung']),key='workingdir'
     )
 
 st.sidebar.markdown('You selected `%s`' % workingdir)
@@ -240,7 +240,7 @@ fdr = st.sidebar.slider('-log2-based FDR Cutoff', 0, 300, 5, 1)
 fdr = np.power(2,-np.float64(fdr))
 
 # modified PAG enrichment
-PAGERSet=[]
+PAGERSet=pd.DataFrame()
 deg_names=[]
 pag_ids=[]
 pags=[]
@@ -294,12 +294,13 @@ for deg in degs:
 pag_ids=list(set(pag_ids))
 mtx=np.zeros((len(pag_ids), len(deg_names)))
 
-
+st.write(PAGERSet)
 for pag_idx in range(0,len(pag_ids)):
     for name_idx in range(0,len(deg_names)):
         if(deg_names[name_idx]+pag_ids[pag_idx] in PAG_val.keys()):
             mtx[pag_idx,name_idx]=PAG_val[deg_names[name_idx]+pag_ids[pag_idx]]
 
+            
 # arbitarily order the samples
 #orderExpect=['JX12T','jx14P','jx14T','x1066','x1465','x1153','x1516']
 #orderExpect=['NHBE_SARS_CoV_2','NHBE_IAV','NHBE_IAVdNS1','NHBE_IFNB_4h','NHBE_IFNB_6h','NHBE_IFNB_12h',
@@ -310,9 +311,9 @@ for pag_idx in range(0,len(pag_ids)):
 #st.write(treatment_data['Sample'])
 orderExpect = treatment_data['Sample'].tolist()[0:]
 orderIdx = [sampleNames.index(i) for i in orderExpect]
-
 plt = Heatmap.generateHeatmap(np.array(mtx)[::,orderIdx],np.array(deg_names)[orderIdx],pag_ids,rowCluster=True)
 st.pyplot(plt)
+
 
 #st.header('Section 4 out of 5: Generate the heatmap of the samples\' DEG enrichment result (' + str(len(pag_ids)) + ' PAGs)')
 #from PIL import Image
