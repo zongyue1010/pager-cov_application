@@ -83,7 +83,7 @@ st.sidebar.markdown('You selected `%s`' % workingdir)
 #    st.markdown(f"[{name_link}]({str_url})")
 #    return str_url
 
-
+#@st.cache(allow_output_mutation=True)
 def get_table_download_link(df, **kwargs):
     """Generates a link allowing the data in a given panda dataframe to be downloaded
     in:  dataframe
@@ -98,6 +98,7 @@ def get_table_download_link(df, **kwargs):
     return(href)
 
 # Return GBM PDX clinical data as a data frame.
+@st.cache(allow_output_mutation=True)
 def load_clinical_data():
 	# Note these data are results from a UWS API query performed by Abakash for GBM cohort demographic data. See Nov 19, 2019 e-mail for further detail.
 	df = pd.read_csv('getalli2b2demographics-rdalej-27676.csv')
@@ -110,14 +111,14 @@ def load_clinical_data():
 	return df.drop(columns=['Age(in years)'])
 
 # Return GBM treatment data as a data frame.
-#@st.cache
+@st.cache(allow_output_mutation=True)
 def load_treatment_data():
     #df = pd.read_csv('SampleTreatment.txt',sep="\t")
     df = pd.read_csv(workingdir+'/'+'description.txt',sep="\t")
     return(df)
 
 # Return DEG results for JX12T pairwise comparison as data frame.
-#@st.cache
+#@st.cache(allow_output_mutation=True)
 def load_deg_results():
 	# See https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_table.html.
 	expSet=[]
@@ -208,8 +209,9 @@ if st.checkbox('Show DEG results table', value=True):
         deg=degs[idx]
         sampleName=deg[0]
         st.write('You selected: '+sampleName)
-        degs[idx][1] = degs[idx][1].drop(['symbol'], axis=1, errors='ignore')
-        degs[idx][1] = degs[idx][1].rename(columns = {"Unnamed: 0":'symbol'}) #, inplace = True
+        if 'Unnamed: 0' in degs[idx][1].keys():
+            degs[idx][1] = degs[idx][1].drop(['symbol'], axis=1, errors='ignore')
+            degs[idx][1] = degs[idx][1].rename(columns = {"Unnamed: 0":'symbol'}) #, inplace = True
         
         st.write(degs[idx][1])
 
@@ -271,8 +273,7 @@ for deg in degs:
             # See https://streamlit.io/docs/api.html#streamlit.slider.
             user_min, user_max = st.slider('GS_SIZE Range'+deg_name, max_value=max_gs_size, value=(min_gs_size, max_gs_size))
             filtered_output = pager_output[pager_output['GS_SIZE'].between(user_min, user_max)]
-            st.write(filtered_output)
-            PAGERSet.append([deg_name,filtered_output])
+            st.write(filtered_output)            
             if(len(filtered_output.index)>0):
                 for row in filtered_output.iloc[:,[0,1,-1]].values:
                     pag_id=str(row[0])+"_"+str(row[1])
@@ -280,9 +281,12 @@ for deg in degs:
                     pag_ids=pag_ids+[pag_id]
                     val=-np.log(row[2])/np.log(10)
                     PAG_val[deg_name+pag_id]=val
+            filtered_output['SAMPLE'] = deg_name
+            PAGERSet = PAGERSet.append(filtered_output)
             st.markdown(get_table_download_link(filtered_output, fileName = deg[0]+' geneset enrichment result'), unsafe_allow_html=True)
         else:
-            PAGERSet.append([deg_name,pager_output])
+            pager_output['SAMPLE'] = deg_name
+            PAGERSet = PAGERSet.append([deg_name,pager_output])
             if(len(pager_output.index)>0):
                 for row in pager_output.iloc[:,[0,1,-1]].values:
                     pag_id=str(row[0])+"_"+str(row[1])
@@ -291,10 +295,19 @@ for deg in degs:
                     val=-np.log(row[2])/np.log(10)
                     PAG_val[deg_name+pag_id]=val
 
+PAGERSet = pd.DataFrame(PAGERSet)
+PAGERSet['PAG_FULL'] = pag_ids
 pag_ids=list(set(pag_ids))
-mtx=np.zeros((len(pag_ids), len(deg_names)))
 
-st.write(PAGERSet)
+#st.write(PAGERSet)
+opts = []
+for deg_name in deg_names:
+    opts.append((deg_name))
+known_variables = {symbol: st.checkbox(f"{symbol}", value = True) for symbol in opts}
+selected_pags = [key for key,val in known_variables.items() if val == True]#
+pag_ids=list(set(PAGERSet[PAGERSet['SAMPLE'].isin(selected_pags)]['PAG_FULL'].tolist()))
+#st.write(pag_ids)
+mtx=np.zeros((len(pag_ids), len(deg_names)))
 for pag_idx in range(0,len(pag_ids)):
     for name_idx in range(0,len(deg_names)):
         if(deg_names[name_idx]+pag_ids[pag_idx] in PAG_val.keys()):

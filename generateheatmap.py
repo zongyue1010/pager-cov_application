@@ -99,7 +99,7 @@ class generateHeatmap():
         hm = g.ax_heatmap.get_position()
         scale_factor = len(pag_ids)/40
         if scale_factor<3 or scale_factor>7:
-            width_ratio = width_ratio * 80
+            width_ratio = width_ratio * 10
         # to change the legends location
         g.ax_heatmap.set_position([hm.x0*scale_factor, hm.y0*scale_factor, hm.width*width_ratio*scale_factor, hm.height*scale_factor])
         col = g.ax_col_dendrogram.get_position()
@@ -111,7 +111,7 @@ class generateHeatmap():
         ### color bar position and title ref: https://stackoverflow.com/questions/67909597/seaborn-clustermap-colorbar-adjustment
         ### color bar position adjustment
         x0, _y0, _w, _h = g.cbar_pos
-        g.ax_cbar.set_position([x0, _y0*scale_factor+0.1, row.width*width_ratio, 0.05])
+        g.ax_cbar.set_position([x0, _y0*scale_factor+0.1, row.width, 0.05])
         g.ax_cbar.set_title('-log2 FDR') 
         
         bottom, top = g.ax_heatmap.get_ylim()
