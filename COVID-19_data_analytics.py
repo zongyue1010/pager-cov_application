@@ -37,10 +37,10 @@ st.sidebar.subheader('Data')
 link = 'The COVID-19 transcriptional response data is from [GSE147507](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE147507)'
 st.sidebar.markdown(link, unsafe_allow_html=True)
 
-st.sidebar.text("1.NHBE: Primary human lung epithelium.\n2.A549: Lung alveolar.\n3.Calu3:The transformed lung-derived Calu-3 cells.\n4.Lung: The patient lung samples.")
+st.sidebar.text("1.NHBE: Primary human lung epithelium.\n2.A549: Lung alveolar.\n3.Calu3:The transformed lung-derived Calu-3 cells.\n4.Lung: The patient lung samples.\n5.NP: The Nasopharyngeal samples.")
 workingdir = st.sidebar.selectbox(
     'select a cell line or tissue:',
-    tuple(['NHBE','A549','Calu3','Lung']),key='workingdir'
+    tuple(['NHBE','A549','Calu3','Lung','NP']),key='workingdir'
     )
 
 st.sidebar.markdown('You selected `%s`' % workingdir)
@@ -98,18 +98,6 @@ def get_table_download_link(df, **kwargs):
     href = f'<a href="data:file/csv;base64,{b64}" download="'+kwargs['fileName']+'\.txt">'+prefix+'</a>'
     return(href)
 
-# Return GBM PDX clinical data as a data frame.
-@st.cache(allow_output_mutation=True)
-def load_clinical_data():
-	# Note these data are results from a UWS API query performed by Abakash for GBM cohort demographic data. See Nov 19, 2019 e-mail for further detail.
-	df = pd.read_csv('getalli2b2demographics-rdalej-27676.csv')
-	# Mask PHI variables. Double-check with Matt.
-	df['Patient Id'] = np.arange(27)
-	df['Birth Date'] = 'masked'
-	df['Death Date'] = 'masked'
-	df['Zip Code'] = 'masked'
-	# Remove age field due to possible confusion created by -1 values, see https://gitlab.rc.uab.edu/jelaiw/infrastructure-development/issues/146#note_18590 for further detail and context.
-	return df.drop(columns=['Age(in years)'])
 
 # Return GBM treatment data as a data frame.
 @st.cache(allow_output_mutation=True)
@@ -300,7 +288,7 @@ PAGERSet = pd.DataFrame(PAGERSet)
 PAGERSet['PAG_FULL'] = pag_ids
 pag_ids=list(set(pag_ids))
 
-#st.write(PAGERSet)
+st.write("Select the samples and narrow down the PAGs in enriched those samples")
 opts = []
 for deg_name in deg_names:
     opts.append((deg_name))
@@ -373,6 +361,7 @@ if PAGid:
                 SYM_B_idx=[name for name, vals in idx2symbol.items() if vals == pair['SYM_B']][0]
             idxPair.append((SYM_A_idx,SYM_B_idx))
             PPI.append((pair['SYM_A'],pair['SYM_B']))
+            
         return(idxPair,PPI,idx2symbol)
 
     (idxPair,PPI,idx2symbol) = PPIgeneration(geneInt)
@@ -413,6 +402,7 @@ if PAGid:
 
         # expression data in network
         expInNetwork=np.array(genesExp)[np.logical_or.reduce([np.array(genesExp)[:,0] == x for x in idx2symbol.values()])].tolist()
+        st.write(genesExp)
         # show expression table
         st.write("Gene expression table")
         expInNetworkArr = np.array(expInNetwork)

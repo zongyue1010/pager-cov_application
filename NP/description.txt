@@ -1,0 +1,2 @@
+Sample	Case:control	Description	Link
+NP_JEM	30:8	Nasopharyngeal (NP) swab RNA from SARS-CoV-2–positive patients (n = 30) and SARS-CoV-2–negative healthcare worker controls (n = 8)	https://rupress.org/jem/article/218/8/e20210583/212380/Dynamic-innate-immune-response-determines

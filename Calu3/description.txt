@@ -1,2 +1,2 @@
-Sample	Number	Description	Series
-Calu3_SARS_CoV_2	3	The transformed lung-derived Calu-3 cells were infected with SARS-CoV-2 (USA-WA1/2020). 	7
+Sample	Case:control	Description	GSE ID and Series
+Calu3_SARS_CoV_2	3:3	The transformed lung-derived Calu-3 cells were infected with SARS-CoV-2 (USA-WA1/2020). 	GSE147507-7

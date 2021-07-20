@@ -89,6 +89,8 @@ class generateHeatmap():
             g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,col_linkage=col_linkage,row_cluster=False,  yticklabels=True,
                           annot=True,annot_kws={"size": annotationSize})  
         else:
+            if int(deg_names.size) == 1:
+                expMtxsDF = expMtxsDF.sort_values(by=list(deg_names), ascending=False)
             g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,row_cluster=False,col_cluster=False,  yticklabels=True,
                           annot=True,annot_kws={"size": annotationSize})  
             #g.ax_row_dendrogram.set_xlim([0,0]) 
@@ -99,7 +101,7 @@ class generateHeatmap():
         hm = g.ax_heatmap.get_position()
         scale_factor = len(pag_ids)/40
         if scale_factor<3 or scale_factor>7:
-            width_ratio = width_ratio * 10
+            width_ratio = width_ratio *1.5
         # to change the legends location
         g.ax_heatmap.set_position([hm.x0*scale_factor, hm.y0*scale_factor, hm.width*width_ratio*scale_factor, hm.height*scale_factor])
         col = g.ax_col_dendrogram.get_position()
