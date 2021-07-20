@@ -1,0 +1,2 @@
+Sample	Case:control	Description	GSE ID and Series
+PBMC_SARS_CoV_2	17:17	RNAseq analysis of PBMCs in a group of 17 COVID-19 subjects and 17 healthy controls	GSE152418

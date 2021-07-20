@@ -31,13 +31,13 @@ hex_map = [matplotlib.colors.to_hex(i, keep_alpha=True) for i in newcolors]
 
 #st.title('GBM-PDX Data Analysis in U01 Project')
 st.title('COVID-19 Data Analysis')
-st.markdown('*Zongliang Yue, Jake Chen*')
+st.markdown('*Zongliang Yue, Nishant Batra, Jake Chen*')
 
 st.sidebar.subheader('Data')
 link = 'The COVID-19 transcriptional response data is from [GSE147507](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE147507)'
 st.sidebar.markdown(link, unsafe_allow_html=True)
 
-st.sidebar.text("1.NHBE: Primary human lung epithelium.\n2.A549: Lung alveolar.\n3.Calu3:The transformed lung-derived Calu-3 cells.\n4.Lung: The patient lung samples.\n5.NP: The Nasopharyngeal samples.")
+st.sidebar.text("1.NHBE: Primary human lung epithelium.\n2.A549: Lung alveolar.\n3.Calu3:The transformed lung-derived Calu-3 cells.\n4.Lung: The lung samples.\n5.NP: The nasopharyngeal samples.")
 workingdir = st.sidebar.selectbox(
     'select a cell line or tissue:',
     tuple(['NHBE','A549','Calu3','Lung','NP']),key='workingdir'
@@ -402,7 +402,7 @@ if PAGid:
 
         # expression data in network
         expInNetwork=np.array(genesExp)[np.logical_or.reduce([np.array(genesExp)[:,0] == x for x in idx2symbol.values()])].tolist()
-        st.write(genesExp)
+        #st.write(genesExp)
         # show expression table
         st.write("Gene expression table")
         expInNetworkArr = np.array(expInNetwork)
