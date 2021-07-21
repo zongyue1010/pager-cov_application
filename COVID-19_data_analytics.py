@@ -30,7 +30,7 @@ hex_map = [matplotlib.colors.to_hex(i, keep_alpha=True) for i in newcolors]
 
 
 #st.title('GBM-PDX Data Analysis in U01 Project')
-st.title('COVID-19 Data Analysis')
+st.title('PAGER-CoV-Run')
 st.markdown('*Zongliang Yue, Nishant Batra, Jake Chen*')
 
 st.sidebar.subheader('Data')

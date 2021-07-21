@@ -1,7 +1,7 @@
 # 1. ref: https://devcenter.heroku.com/articles/getting-started-with-python#set-up
 create heroku
 https://pager-cov-app.herokuapp.com/
-heroku apps:rename pager-cov-app
+heroku apps:rename pager-cov-run
 
 git push heroku main
 
