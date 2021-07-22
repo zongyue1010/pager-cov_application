@@ -31,16 +31,16 @@ hex_map = [matplotlib.colors.to_hex(i, keep_alpha=True) for i in newcolors]
 
 #st.title('GBM-PDX Data Analysis in U01 Project')
 st.title('PAGER-CoV-Run')
-st.markdown('*Zongliang Yue, Nishant Batra, Jake Chen*')
+st.markdown('*Zongliang Yue, Nishant Batra, Hui-Chen Hsu, John Mountz, Jake Chen*')
 
 st.sidebar.subheader('Data')
 link = 'The COVID-19 transcriptional response data is from [GSE147507](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE147507)'
 st.sidebar.markdown(link, unsafe_allow_html=True)
 
-st.sidebar.text("1.NHBE: Primary human lung epithelium.\n2.A549: Lung alveolar.\n3.Calu3:The transformed lung-derived Calu-3 cells.\n4.Lung: The lung samples.\n5.NP: The nasopharyngeal samples.")
+st.sidebar.text("1.NHBE: Primary human lung epithelium.\n2.A549: Lung alveolar.\n3.Calu3:The transformed lung-derived Calu-3 cells.\n4.Lung: The lung samples.\n5.NP: The nasopharyngeal samples.\n6.PBMC: The peripheral blood mononuclear cell.")
 workingdir = st.sidebar.selectbox(
     'select a cell line or tissue:',
-    tuple(['NHBE','A549','Calu3','Lung','NP']),key='workingdir'
+    tuple(['NHBE','A549','Calu3','Lung','NP','PBMC']),key='workingdir'
     )
 
 st.sidebar.markdown('You selected `%s`' % workingdir)
