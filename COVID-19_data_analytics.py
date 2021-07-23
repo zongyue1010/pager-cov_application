@@ -34,7 +34,7 @@ st.title('PAGER-CoV-Run')
 st.markdown('*Zongliang Yue, Nishant Batra, Hui-Chen Hsu, John Mountz, Jake Chen*')
 
 st.sidebar.subheader('Data')
-link = 'The COVID-19 transcriptional response data is from [GSE147507](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE147507)'
+link = 'The COVID-19 transcriptional response data is from [GSE147507](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE147507), and [GSE152418](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE152418)'
 st.sidebar.markdown(link, unsafe_allow_html=True)
 
 st.sidebar.text("1.NHBE: Primary human lung epithelium.\n2.A549: Lung alveolar.\n3.Calu3:The transformed lung-derived Calu-3 cells.\n4.Lung: The lung samples.\n5.NP: The nasopharyngeal samples.\n6.PBMC: The peripheral blood mononuclear cell.")
@@ -313,6 +313,7 @@ for pag_idx in range(0,len(pag_ids)):
 #st.write(treatment_data['Sample'])
 orderExpect = treatment_data['Sample'].tolist()[0:]
 orderIdx = [sampleNames.index(i) for i in orderExpect]
+#st.write([len(pag_id) for pag_id in pag_ids])
 plt = Heatmap.generateHeatmap(np.array(mtx)[::,orderIdx],np.array(deg_names)[orderIdx],pag_ids,rowCluster=True)
 st.pyplot(plt)
 
@@ -373,15 +374,15 @@ if PAGid:
     G.add_nodes_from(idx2symbol.values())
     G.add_edges_from(PPI)
     pos=run_force_layout(G)
-    layout = st.sidebar.selectbox('layout',['dot',
-                                            'neato', 
-                                            'circo', 
-                                            'fdp', 
-                                            'sfdp'])
-    
-    rankdir = st.sidebar.selectbox("rankdir", ['BT', 'TB', 'LR', 'RL'])
-    ranksep = st.sidebar.slider("ranksep",min_value=0, max_value=10)
-    nodesep = st.sidebar.slider("nodesep",min_value=0, max_value=10)
+    #layout = st.sidebar.selectbox('layout',['dot',
+    #                                        'neato', 
+    #                                        'circo', 
+    #                                        'fdp', 
+    #                                        'sfdp'])
+    #
+    #rankdir = st.sidebar.selectbox("rankdir", ['BT', 'TB', 'LR', 'RL'])
+    #ranksep = st.sidebar.slider("ranksep",min_value=0, max_value=10)
+    #nodesep = st.sidebar.slider("nodesep",min_value=0, max_value=10)
     config = Config(height=500, width=700, nodeHighlightBehavior=True, highlightColor="#F7A7A6", directed=False,
                   collapsible=True,              
                   node={'labelProperty':'label',"strokeColor": "black"},#, link={'labelProperty': 'label', 'renderLabel': True}

@@ -100,8 +100,9 @@ class generateHeatmap():
         plt.setp(g.ax_heatmap.xaxis.get_majorticklabels(), rotation=90, fontsize= font_size-2)
         hm = g.ax_heatmap.get_position()
         scale_factor = len(pag_ids)/40
-        if scale_factor<3 or scale_factor>7:
-            width_ratio = width_ratio *1.5
+        width_ratio = width_ratio * (max([len(pag) for pag in pag_ids])/500) * int(deg_names.size) + 0.2
+        #if scale_factor<3 or scale_factor>7:
+        #    width_ratio = width_ratio *1.5
         # to change the legends location
         g.ax_heatmap.set_position([hm.x0*scale_factor, hm.y0*scale_factor, hm.width*width_ratio*scale_factor, hm.height*scale_factor])
         col = g.ax_col_dendrogram.get_position()
