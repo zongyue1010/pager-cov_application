@@ -162,6 +162,12 @@ def run_pager_int(PAGid):
 	response = requests.get('http://discovery.informatics.uab.edu/PAGER-COV/index.php/pag_mol_mol_map/interactions/'+PAGid)
 	return pd.DataFrame(response.json())
 
+# pag_ranked_gene in PAG
+#@st.cache(allow_output_mutation=True)
+def pag_ranked_gene(PAGid):
+	response = requests.get('http://discovery.informatics.uab.edu/PAGER-COV/index.php/genesinPAG/viewgenes/'+PAGid)
+	return pd.DataFrame(response.json()['gene'])
+
 # generate force layout
 @st.cache(allow_output_mutation=True)
 def run_force_layout(G):
@@ -337,35 +343,37 @@ if PAGid:
     st.write("For the "+ str(PAGid)+"'s gene network")
     PAGid=re.sub("_[^_]+","",PAGid)
     geneInt=run_pager_int(PAGid)
-    
+    geneRanked=pag_ranked_gene(PAGid)
+    #st.write(geneRanked)
+    idx2symbol = dict()
+    symbol2idx = dict()
+    symbol2size = dict()
+    idx=0
+    for gene_idx in range(0,geneRanked.shape[0]):
+
+        gene = geneRanked.iloc[gene_idx,]
+        #st.write(gene)
+        symbol2idx[gene['GENE_SYM']] = str(idx)
+        #st.write(gene['RP_SCORE'])
+        #symbol2size[gene['GENE_SYM']] = gene['RP_SCORE']
+        if(gene['RP_SCORE'] is not None):
+            symbol2size[gene['GENE_SYM']] = gene['RP_SCORE']
+        else:
+            symbol2size[gene['GENE_SYM']] = 1
+        idx2symbol[str(idx)] = gene['GENE_SYM']
+        idx+=1
     ### generate PPI data ###
     @st.cache(allow_output_mutation=True)
-    def PPIgeneration(geneInt):
-        idx2symbol = dict()
-        idx=0
+    def PPIgeneration(geneInt,symbol2idx):      
         idxPair=[]
         PPI=[]
         for pair in geneInt['data']:
-            if not pair['SYM_A'] in idx2symbol.values():
-                idx2symbol[idx] = pair['SYM_A']
-                SYM_A_idx=idx
-                idx+=1
-                #print(SYM_A_idx)
-            else:
-                SYM_A_idx=[name for name, vals in idx2symbol.items() if vals == pair['SYM_A']][0]
-            if not pair['SYM_B'] in idx2symbol.values():
-                idx2symbol[idx]=pair['SYM_B']
-                SYM_B_idx=idx
-                idx+=1
-                #print(SYM_B_idx)
-            else:
-                SYM_B_idx=[name for name, vals in idx2symbol.items() if vals == pair['SYM_B']][0]
-            idxPair.append((SYM_A_idx,SYM_B_idx))
+            idxPair.append((symbol2idx[pair['SYM_A']],symbol2idx[pair['SYM_B']]))
             PPI.append((pair['SYM_A'],pair['SYM_B']))
             
         return(idxPair,PPI,idx2symbol)
 
-    (idxPair,PPI,idx2symbol) = PPIgeneration(geneInt)
+    (idxPair,PPI,idx2symbol) = PPIgeneration(geneInt,symbol2idx)
     #st.write(PPI)
     
     # spring force layout in networkx
@@ -446,7 +454,7 @@ if PAGid:
             nodes = [] 
             for i in X.nodes:             
                 #carac.to_dict()["myvalue"][str(i)]
-                nodes.append(Node(id=i, label=str(i), size=400,  
+                nodes.append(Node(id=i, label=str(i), size=symbol2size[str(i)],#400,  
                                   color=hex_map[int( carac.to_dict()["myvalue"][i]/max_val*colorUnit)+colorUnit])
                             ) # includes **kwargs
             edges = [Edge(source=i, label="int", target=j,color="#d3d3d3") for (i,j) in X.edges] # includes **kwargs  type="CURVE_SMOOTH"
