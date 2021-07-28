@@ -1,0 +1,5 @@
+Sample	Case:control	Description	GSE ID and Series
+Liver_Organoid_Donor_1_SARS_CoV_2	2:2	Transcriptomic analysis of stem cell derived liver organoids	GSE151803
+Liver_Organoid_Donor_1_SARS_CoV_2_R2	2:2	Transcriptomic analysis of stem cell derived liver organoids	GSE151803
+Liver_Organoid_Donor_2_SARS_CoV_2_R2	2:2	Transcriptomic analysis of stem cell derived liver organoids	GSE151803
+

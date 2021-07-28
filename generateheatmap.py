@@ -25,7 +25,7 @@ class generateHeatmap():
     def __new__(self,mtx,deg_names,pag_ids,**kwargs):
         plt.figure(figsize=(5,30))
         # parameters in the heatmap setting 
-        width_ratio = 0.8
+        width_ratio = 1
         annotationSize = 6
         font_size = 12
         rowCluster = False
@@ -100,7 +100,10 @@ class generateHeatmap():
         plt.setp(g.ax_heatmap.xaxis.get_majorticklabels(), rotation=90, fontsize= font_size-2)
         hm = g.ax_heatmap.get_position()
         scale_factor = len(pag_ids)/40
-        width_ratio = width_ratio * (max([len(pag) for pag in pag_ids])/500) * int(deg_names.size) + 0.2
+        max_content_length = (500/max([len(pag) for pag in pag_ids]))
+        if max_content_length < 0:
+            max_content_length = 2
+        width_ratio = width_ratio * 2**max_content_length * int(deg_names.size**2)
         #if scale_factor<3 or scale_factor>7:
         #    width_ratio = width_ratio *1.5
         # to change the legends location

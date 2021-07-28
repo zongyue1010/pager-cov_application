@@ -1,0 +1,5 @@
+Sample	Case:control	Description	GSE ID and Series
+leukoycyte_male_NonICU	29:4	The normalized transcript per million (TPM) counts in RNA-seq of the male non-ICU patients vs the controls 	GSE157103
+leukoycyte_female_NonICU	21:6	The normalized transcript per million (TPM) counts in RNA-seq of the female non-ICU patients vs the controls 	GSE157103
+leukoycyte_male_ICU	33:8	The normalized transcript per million (TPM) counts in RNA-seq of the male ICU patients vs the controls 	GSE157103
+leukoycyte_female_ICU	17:7	The normalized transcript per million (TPM) counts in RNA-seq of the female ICU patients vs the controls 	GSE157103

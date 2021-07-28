@@ -1,0 +1,2 @@
+Sample	Case:control	Description	GSE ID and Series
+Pancreas_hESC_SARS_CoV_2	3:3	Transcriptomic analysis of stem cell derived pancreatic organoids	GSE151803

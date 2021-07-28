@@ -2,7 +2,8 @@
 create heroku
 https://pager-cov-app.herokuapp.com/
 heroku apps:rename pager-cov-run
-
+git add .
+git commit -m "ok"
 git push heroku main
 
 # unset heroku buildback

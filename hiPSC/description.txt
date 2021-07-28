@@ -1,0 +1,2 @@
+Sample	Case:control	Description	GSE ID and Series
+hiPSC_CMs_SARS_CoV_2	3:3	RNA-Seq of Human induced pluripotent stem cell-derived cardiomyocytes (Human iPSC-cardiomyocytes) infected with SARS-CoV-2	GSE150392

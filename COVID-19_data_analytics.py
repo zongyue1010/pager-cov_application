@@ -37,10 +37,10 @@ st.sidebar.subheader('Data')
 link = 'The COVID-19 transcriptional response data is from [GSE147507](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE147507), and [GSE152418](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE152418)'
 st.sidebar.markdown(link, unsafe_allow_html=True)
 
-st.sidebar.text("1.NHBE: Primary human lung epithelium.\n2.A549: Lung alveolar.\n3.Calu3:The transformed lung-derived Calu-3 cells.\n4.Lung: The lung samples.\n5.NP: The nasopharyngeal samples.\n6.PBMC: The peripheral blood mononuclear cell.")
+st.sidebar.text("1.NHBE: Primary human lung epithelium.\n2.A549: Lung alveolar.\n3.Calu3:The transformed lung-derived Calu-3 cells.\n4.Lung: The lung samples.\n5.NP: The nasopharyngeal samples.\n6.PBMC: The peripheral blood mononuclear cell.\n7.Leukocyte: The leukocytes.\n8.hiPSC:Human induced pluripotent stem cell-derived cardiomyocytes\n9.Liver Organoid.\n10.Pancreas Organoid")
 workingdir = st.sidebar.selectbox(
     'select a cell line or tissue:',
-    tuple(['NHBE','A549','Calu3','Lung','NP','PBMC']),key='workingdir'
+    tuple(['NHBE','A549','Calu3','Lung','NP','PBMC','Leukoycyte','hiPSC','Liver Organoid','Pancreas Organoid']),key='workingdir'
     )
 
 st.sidebar.markdown('You selected `%s`' % workingdir)
@@ -291,8 +291,13 @@ for deg in degs:
                     PAG_val[deg_name+pag_id]=val
 
 PAGERSet = pd.DataFrame(PAGERSet)
-PAGERSet['PAG_FULL'] = pag_ids
-pag_ids=list(set(pag_ids))
+#st.write(PAGERSet.shape[1])
+if PAGERSet.shape[1] < 2:
+    st.write("No enriched PAGs found. Try a lower similarity score or a lower -log2-based FDR cutoff and rerun.")
+    st.stop()
+else:
+    PAGERSet['PAG_FULL'] = pag_ids
+    pag_ids=list(set(pag_ids))
 
 st.write("Select the samples and narrow down the PAGs in enriched those samples")
 opts = []
