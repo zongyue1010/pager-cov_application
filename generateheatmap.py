@@ -117,7 +117,7 @@ class generateHeatmap():
         ### color bar position and title ref: https://stackoverflow.com/questions/67909597/seaborn-clustermap-colorbar-adjustment
         ### color bar position adjustment
         x0, _y0, _w, _h = g.cbar_pos
-        g.ax_cbar.set_position([x0, _y0*scale_factor+0.1, row.width, 0.05])
+        g.ax_cbar.set_position([x0, _y0*scale_factor+0.1, scale_factor*row.width*2, 0.05])
         g.ax_cbar.set_title('-log2 FDR') 
         
         bottom, top = g.ax_heatmap.get_ylim()

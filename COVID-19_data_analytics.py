@@ -31,10 +31,11 @@ hex_map = [matplotlib.colors.to_hex(i, keep_alpha=True) for i in newcolors]
 
 #st.title('GBM-PDX Data Analysis in U01 Project')
 st.title('PAGER-CoV-Run')
-st.markdown('*Zongliang Yue, Nishant Batra, Hui-Chen Hsu, John Mountz, Jake Chen*')
+st.header('An online interactive analytical platform for COVID-19 functional genomic downstream analysis')
+st.markdown('*Zongliang Yue, Nishant Batra, Hui-Chen Hsu, John Mountz, and Jake Chen*')
 
 st.sidebar.subheader('Data')
-link = 'The COVID-19 transcriptional response data is from [GSE147507](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE147507), and [GSE152418](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE152418)'
+link = 'The COVID-19 transcriptional response data is from [GEO database](https://www.ncbi.nlm.nih.gov/geo/)'
 st.sidebar.markdown(link, unsafe_allow_html=True)
 
 st.sidebar.text("1.NHBE: Primary human lung epithelium.\n2.A549: Lung alveolar.\n3.Calu3:The transformed lung-derived Calu-3 cells.\n4.Lung: The lung samples.\n5.NP: The nasopharyngeal samples.\n6.PBMC: The peripheral blood mononuclear cell.\n7.Leukocyte: The leukocytes.\n8.hiPSC:Human induced pluripotent stem cell-derived cardiomyocytes\n9.Liver Organoid.\n10.Pancreas Organoid")
@@ -209,7 +210,7 @@ if st.checkbox('Show DEG results table', value=True):
             degs[idx][1] = degs[idx][1].rename(columns = {"Unnamed: 0":'symbol'}) #, inplace = True
         
         st.write(degs[idx][1])
-
+        st.markdown(get_table_download_link(pd.DataFrame(degs[idx][1]), fileName = degs[idx][0]+' DEG list result'), unsafe_allow_html=True)
 st.header('Section 3 out of 4: Run PAGER-CoV Analysis')
 st.markdown("The list of significantly differentially expressed genes (DEG) is then passed to PAGER, which offers a network-accessible REST API for performing various gene-set, network, and pathway analyses.")
 
@@ -325,8 +326,13 @@ for pag_idx in range(0,len(pag_ids)):
 orderExpect = treatment_data['Sample'].tolist()[0:]
 orderIdx = [sampleNames.index(i) for i in orderExpect]
 #st.write([len(pag_id) for pag_id in pag_ids])
-width_ratio_heatmap = st.slider('width_ratio_of_heatmap (increase to widen the heatmap)', 0.1, 10.0, 1.0, 0.1)
-plt = Heatmap.generateHeatmap(np.array(mtx)[::,orderIdx],np.array(deg_names)[orderIdx],pag_ids,rowCluster=True,width_ratio=width_ratio_heatmap)
+
+width_ratio_heatmap = st.slider('Width ratio of heatmap (increase to widen the heatmap)', 0.1, 10.0, 1.0, 0.1)
+plt = Heatmap.generateHeatmap(np.array(mtx)[::,orderIdx]
+                              ,np.array(deg_names)[orderIdx]
+                              ,pag_ids
+                              ,rowCluster=True
+                              ,width_ratio=width_ratio_heatmap)
 st.pyplot(plt)
 
 
@@ -355,6 +361,9 @@ if PAGid:
     symbol2idx = dict()
     symbol2size = dict()
     idx=0
+    geneRanked['RP_SCORE'] = geneRanked['RP_SCORE'].astype(float)
+    geneRanked['node_size'] = geneRanked['RP_SCORE'] *4
+    st.write(geneRanked)
     for gene_idx in range(0,geneRanked.shape[0]):
 
         gene = geneRanked.iloc[gene_idx,]
@@ -363,7 +372,7 @@ if PAGid:
         #st.write(gene['RP_SCORE'])
         #symbol2size[gene['GENE_SYM']] = gene['RP_SCORE']
         if(gene['RP_SCORE'] is not None):
-            symbol2size[gene['GENE_SYM']] = gene['RP_SCORE']
+            symbol2size[gene['GENE_SYM']] = gene['node_size']
         else:
             symbol2size[gene['GENE_SYM']] = 1
         idx2symbol[str(idx)] = gene['GENE_SYM']
@@ -483,7 +492,11 @@ st.markdown("http://discovery.informatics.uab.edu/PAGER-COV/")
 st.write("Protein-Protein Interactions (PPIs) in network construction:")
 st.write("Jake Y. Chen, Ragini Pandey, and Thanh M. Nguyen, (2017) HAPPI-2: a Comprehensive and High-quality Map of Human Annotated and Predicted Protein Interactions, BMC Genomics volume 18, Article number: 182")
 st.markdown("http://discovery.informatics.uab.edu/HAPPI/")        
-        
+
+st.header('About us:')
+st.write(f"If you have questions or comments about the database contents, please email Dr. Jake Chen, jakechen@uab.edu.")
+st.write("If you need any technical support, please email Zongliang Yue, zongyue@uab.edu.")
+st.write("Our lab: AI.MED Laboratory, University of Alabama at Birmingham, Alabama, USA. Link: http://bio.informatics.uab.edu/")
 ##for idx in range(0,len(degs)):
 ##    deg=degs[idx]
 ##    sampleName=deg[0]
