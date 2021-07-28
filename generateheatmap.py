@@ -103,7 +103,7 @@ class generateHeatmap():
         max_content_length = (500/max([len(pag) for pag in pag_ids]))
         if max_content_length < 0:
             max_content_length = 2
-        width_ratio = width_ratio * 2**max_content_length * int(deg_names.size**2)
+        width_ratio = width_ratio * 1*max_content_length * int(deg_names.size)
         #if scale_factor<3 or scale_factor>7:
         #    width_ratio = width_ratio *1.5
         # to change the legends location

@@ -325,7 +325,8 @@ for pag_idx in range(0,len(pag_ids)):
 orderExpect = treatment_data['Sample'].tolist()[0:]
 orderIdx = [sampleNames.index(i) for i in orderExpect]
 #st.write([len(pag_id) for pag_id in pag_ids])
-plt = Heatmap.generateHeatmap(np.array(mtx)[::,orderIdx],np.array(deg_names)[orderIdx],pag_ids,rowCluster=True)
+width_ratio_heatmap = st.slider('width_ratio_of_heatmap (increase to widen the heatmap)', 0.1, 10.0, 1.0, 0.1)
+plt = Heatmap.generateHeatmap(np.array(mtx)[::,orderIdx],np.array(deg_names)[orderIdx],pag_ids,rowCluster=True,width_ratio=width_ratio_heatmap)
 st.pyplot(plt)
 
 
