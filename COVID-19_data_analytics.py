@@ -233,7 +233,7 @@ sources = st.sidebar.multiselect('Available Data Sources',
 
 
 olap = st.sidebar.text_input("Overlap ≥", 1)
-sim = st.sidebar.slider('Similarity score ≥', 0.0, 1.0, 0.15, 0.01)
+sim = st.sidebar.slider('Similarity score ≥', 0.0, 1.0, 0.12, 0.01)
 fdr = st.sidebar.slider('-log2-based FDR Cutoff', 0, 300, 5, 1)
 fdr = np.power(2,-np.float64(fdr))
 
@@ -301,12 +301,15 @@ if PAGERSet.shape[1] < 2:
 PAGERSet['PAG_FULL'] = pag_ids
 pag_ids=list(set(pag_ids))
 
-st.write("Select the samples and narrow down the PAGs in enriched those samples")
+st.write("Select the samples and narrow down the PAGs in enriched those selected samples")
 opts = []
 for deg_name in deg_names:
     opts.append((deg_name))
 known_variables = {symbol: st.checkbox(f"{symbol}", value = True) for symbol in opts}
 selected_pags = [key for key,val in known_variables.items() if val == True]#
+if(len(selected_pags) == 0):
+    st.write("Please select at least one sample to generate the heatmap.")
+    st.stop()   
 pag_ids=list(set(PAGERSet[PAGERSet['SAMPLE'].isin(selected_pags)]['PAG_FULL'].tolist()))
 #st.write(pag_ids)
 mtx=np.zeros((len(pag_ids), len(deg_names)))
