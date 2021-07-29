@@ -102,7 +102,7 @@ class generateHeatmap():
         scale_factor = len(pag_ids)/40
         if scale_factor <0.5:
             scale_factor = 0.5
-        max_content_length = (100/max([len(pag) for pag in pag_ids]))
+        max_content_length = (40/max([len(pag) for pag in pag_ids]))
         if max_content_length >10:
             max_content_length = 10
         width_ratio = width_ratio * max_content_length * int(deg_names.size**2)
