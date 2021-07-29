@@ -233,7 +233,7 @@ sources = st.sidebar.multiselect('Available Data Sources',
 
 
 olap = st.sidebar.text_input("Overlap ≥", 1)
-sim = st.sidebar.slider('Similarity score ≥', 0.0, 1.0, 0.1, 0.01)
+sim = st.sidebar.slider('Similarity score ≥', 0.0, 1.0, 0.15, 0.01)
 fdr = st.sidebar.slider('-log2-based FDR Cutoff', 0, 300, 5, 1)
 fdr = np.power(2,-np.float64(fdr))
 
@@ -281,9 +281,9 @@ for deg in degs:
             PAGERSet = PAGERSet.append(filtered_output)
             st.markdown(get_table_download_link(filtered_output, fileName = deg[0]+' geneset enrichment result'), unsafe_allow_html=True)
         else:
-            pager_output['SAMPLE'] = deg_name
-            PAGERSet = PAGERSet.append([deg_name,pager_output])
             if(len(pager_output.index)>0):
+                pager_output['SAMPLE'] = deg_name
+                PAGERSet = PAGERSet.append([deg_name,pager_output])
                 for row in pager_output.iloc[:,[0,1,-1]].values:
                     pag_id=str(row[0])+"_"+str(row[1])
                     pags.append(pag_id)
@@ -296,9 +296,10 @@ PAGERSet = pd.DataFrame(PAGERSet)
 if PAGERSet.shape[1] < 2:
     st.write("No enriched PAGs found. Try a lower similarity score or a lower -log2-based FDR cutoff and rerun.")
     st.stop()
-else:
-    PAGERSet['PAG_FULL'] = pag_ids
-    pag_ids=list(set(pag_ids))
+#st.write(PAGERSet)
+#st.write(pag_ids)
+PAGERSet['PAG_FULL'] = pag_ids
+pag_ids=list(set(pag_ids))
 
 st.write("Select the samples and narrow down the PAGs in enriched those samples")
 opts = []
@@ -327,7 +328,7 @@ orderExpect = treatment_data['Sample'].tolist()[0:]
 orderIdx = [sampleNames.index(i) for i in orderExpect]
 #st.write([len(pag_id) for pag_id in pag_ids])
 
-width_ratio_heatmap = st.slider('Width ratio of heatmap (increase to widen the heatmap)', 0.1, 10.0, 1.0, 0.1)
+width_ratio_heatmap = st.slider('Width ratio of heatmap (increase to widen the heatmap)', 0.1, 5.0, 1.0, 0.1)
 plt = Heatmap.generateHeatmap(np.array(mtx)[::,orderIdx]
                               ,np.array(deg_names)[orderIdx]
                               ,pag_ids
@@ -361,6 +362,7 @@ if PAGid:
     symbol2idx = dict()
     symbol2size = dict()
     idx=0
+    geneRanked['RP_SCORE'].fillna(0.1, inplace=True)
     geneRanked['RP_SCORE'] = geneRanked['RP_SCORE'].astype(float)
     geneRanked['node_size'] = geneRanked['RP_SCORE'] *4
     st.write(geneRanked)

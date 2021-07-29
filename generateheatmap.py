@@ -100,10 +100,12 @@ class generateHeatmap():
         plt.setp(g.ax_heatmap.xaxis.get_majorticklabels(), rotation=90, fontsize= font_size-2)
         hm = g.ax_heatmap.get_position()
         scale_factor = len(pag_ids)/40
+        if scale_factor <0.5:
+            scale_factor = 0.5
         max_content_length = (500/max([len(pag) for pag in pag_ids]))
-        if max_content_length < 0:
-            max_content_length = 2
-        width_ratio = width_ratio * 1*max_content_length * int(deg_names.size)
+        if max_content_length >10:
+            max_content_length = 10
+        width_ratio = width_ratio * max_content_length * int(deg_names.size)
         #if scale_factor<3 or scale_factor>7:
         #    width_ratio = width_ratio *1.5
         # to change the legends location
