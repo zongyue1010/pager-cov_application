@@ -75,9 +75,9 @@ class generateHeatmap():
         #sns.set(font_scale=1,rc={'figure.figsize':(3,20)})
         
         
-        print(rowCluster == True and int(deg_names.size) > 1)
+        #print(rowCluster == True and int(deg_names.size) > 1)
 
-        print(int(deg_names.size))
+        #print(int(deg_names.size))
         if(rowCluster == True and colCluster == True and int(deg_names.size) > 1): 
             g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,col_linkage=col_linkage,row_linkage=row_linkage,  yticklabels=True,
                           annot=True,annot_kws={"size": annotationSize})        
@@ -102,10 +102,10 @@ class generateHeatmap():
         scale_factor = len(pag_ids)/40
         if scale_factor <0.5:
             scale_factor = 0.5
-        max_content_length = (500/max([len(pag) for pag in pag_ids]))
+        max_content_length = (100/max([len(pag) for pag in pag_ids]))
         if max_content_length >10:
             max_content_length = 10
-        width_ratio = width_ratio * max_content_length * int(deg_names.size)
+        width_ratio = width_ratio * max_content_length * int(deg_names.size**2)
         #if scale_factor<3 or scale_factor>7:
         #    width_ratio = width_ratio *1.5
         # to change the legends location
