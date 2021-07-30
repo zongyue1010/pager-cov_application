@@ -469,12 +469,7 @@ if PAGid:
     G.add_edges_from(PPI)
     pos=run_force_layout(G)
 
-    config = Config(height=500, width=700, nodeHighlightBehavior=True, highlightColor="#F7A7A6", directed=False,
-                  collapsible=True,              
-                  node={'labelProperty':'label',"strokeColor": "black"},
-                  #, link={'labelProperty': 'label', 'renderLabel': True}
-                  link={'color': "#d3d3d3"}
-               )
+
     
     #SampleNameButton = st.radio(
     #     "selected sample",
@@ -486,6 +481,13 @@ if PAGid:
     for idx in orderIdx:        
         deg=degs[idx]
         sampleName=deg[0]
+        config = Config(height=500, width=700, nodeHighlightBehavior=True, highlightColor="#F7A7A6", directed=False,
+              collapsible=True,              
+              node={'labelProperty':'label',"strokeColor": "black"},
+              #, link={'labelProperty': 'label', 'renderLabel': True}
+              link={'color': "#d3d3d3"},
+                        key="agraph_"+sampleName
+           )
         st.write("Sample:"+sampleName)
         deg_results=deg[1]
         genesExp = [x for x in deg_results[['symbol','log2FoldChange']].values.tolist() if str(x[0]) != 'nan']
