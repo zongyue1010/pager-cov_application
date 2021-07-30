@@ -212,7 +212,7 @@ if st.checkbox('Show DEG results table', value=True):
         st.write(degs[idx][1])
         st.markdown(get_table_download_link(pd.DataFrame(degs[idx][1]), fileName = degs[idx][0]+' DEG list result'), unsafe_allow_html=True)
 st.header('Section 3 out of 4: Run PAGER-CoV Analysis')
-st.markdown("The list of significantly differentially expressed genes (DEG) is then passed to PAGER, which offers a network-accessible REST API for performing various gene-set, network, and pathway analyses.")
+st.markdown("The list of significantly differentially expressed genes (DEG) is then passed to Pathways, Annotated gene lists, and Gene signatures Electronic Repository (PAGER), which offers a network-accessible REST API for performing various gene-set, network, and pathway analyses.")
 
 st.sidebar.subheader('Adjust PAGER-CoV Parameters')
 link = 'The PAGER-CoV database detail [http://discovery.informatics.uab.edu/PAGER-COV/](http://discovery.informatics.uab.edu/PAGER-COV/)'
