@@ -23,7 +23,7 @@ from matplotlib import rcParams
 
 class generateHeatmap():
     def __new__(self,mtx,deg_names,pag_ids,**kwargs):
-        plt.figure(figsize=(5,30))
+        plt.figure(figsize=(5,5))
         # parameters in the heatmap setting 
         width_ratio = 1
         annotationSize = 6
@@ -100,7 +100,7 @@ class generateHeatmap():
         plt.setp(g.ax_heatmap.xaxis.get_majorticklabels(), rotation=90, fontsize= font_size-2)
         hm = g.ax_heatmap.get_position()
         scale_factor = len(pag_ids)/40
-        if scale_factor <0.5:
+        if scale_factor <  0.5:
             scale_factor = 0.5
         #max_content_length = (40/max([len(pag) for pag in pag_ids]))
         #if max_content_length >10:
@@ -119,7 +119,7 @@ class generateHeatmap():
         ### color bar position and title ref: https://stackoverflow.com/questions/67909597/seaborn-clustermap-colorbar-adjustment
         ### color bar position adjustment
         x0, _y0, _w, _h = g.cbar_pos
-        g.ax_cbar.set_position([x0, _y0*scale_factor+0.1, scale_factor*row.width*2, 0.05])
+        g.ax_cbar.set_position([x0, _y0*scale_factor+0.1, row.width*scale_factor, 0.05])
         g.ax_cbar.set_title('-log2 FDR') 
         
         bottom, top = g.ax_heatmap.get_ylim()

@@ -356,7 +356,7 @@ tuple(pag_ids)
     )
 
 if PAGid:
-    st.write("For the "+ str(PAGid)+"'s gene network")
+    st.write("For the "+ str(PAGid)+"'s gene information in the selected PAG.")
     PAGid=re.sub("_[^_]+","",PAGid)
     geneInt=run_pager_int(PAGid)
     geneRanked=pag_ranked_gene(PAGid)
@@ -417,15 +417,17 @@ if PAGid:
                   link={'color': "#d3d3d3"}
                )
     
-    SampleNameButton = st.radio(
-         "selected sample",
-         sampleNames,key='network')
+    #SampleNameButton = st.radio(
+    #     "selected sample",
+    #     sampleNames,key='network')
     colorMap = dict()
-    if SampleNameButton in [i[0] for i in degs]:
-        idx=[i[0] for i in degs].index(SampleNameButton)
+    
+    #if SampleNameButton in [i[0] for i in degs]:    
+        #idx=[i[0] for i in degs].index(SampleNameButton)
+    for idx in orderIdx:        
         deg=degs[idx]
         sampleName=deg[0]
-        st.write('You selected: '+sampleName)
+        st.write("Sample:"+sampleName)
         deg_results=deg[1]
         genesExp = [x for x in deg_results[['symbol','log2FoldChange']].values.tolist() if str(x[0]) != 'nan']
 
@@ -433,7 +435,7 @@ if PAGid:
         expInNetwork=np.array(genesExp)[np.logical_or.reduce([np.array(genesExp)[:,0] == x for x in idx2symbol.values()])].tolist()
         #st.write(genesExp)
         # show expression table
-        st.write("Gene expression table")
+        st.write("Gene expression within the selected PAG:")
         expInNetworkArr = np.array(expInNetwork)
         expInNetworkArrSorted = np.array(sorted(expInNetworkArr,key = lambda expInNetworkArr:np.float64(expInNetworkArr[1]), reverse=True))
         DataE=pd.DataFrame(expInNetworkArrSorted)
@@ -487,8 +489,8 @@ if PAGid:
             st.markdown(get_table_download_link(pd.DataFrame(DataE), fileName = ' '+sampleName+' '+str(PAGid)+' data for gene expressions'), unsafe_allow_html=True)
         else:
             st.write("No expression.")
-    else:
-        st.write("You select nothing.")
+    #else:
+    #    st.write("You select nothing.")
 
 st.header('Cite:')
 st.write("PAGER-CoV analysis:")
