@@ -120,11 +120,13 @@ class generateHeatmap():
         ### color bar position adjustment
         x0, _y0, _w, _h = g.cbar_pos
         g.ax_cbar.set_position([x0, _y0*scale_factor+0.1, row.width*scale_factor, 0.05])
-        g.ax_cbar.set_title('-log2 FDR') 
-        
+        g.ax_cbar.set_title('-log2 FDR')        
         bottom, top = g.ax_heatmap.get_ylim()
-        
-        plt.rcParams["axes.grid"] = False
+        plt.rcParams["axes.grid"] = False       
+        return(plt)
+    
+if __name__ == '__main__':
+    generateHeatmap()
         #plt.rcParams["figure.figsize"] = [20,plt.rcParams["figure.figsize"][1]]
       
         #plt.show()
@@ -164,7 +166,3 @@ class generateHeatmap():
 ##            for j in range(len(deg_names)):
 ##                text = ax.text(j, i, mtx[i, j],ha="center", va="center", color="w")
         #ax.set_title("sample-PAG associations")
-        
-        return(plt)
-if __name__ == '__main__':
-    generateHeatmap()
