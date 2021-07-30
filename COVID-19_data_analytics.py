@@ -6,7 +6,7 @@ import os
 import re
 import matplotlib
 import matplotlib.pyplot as plt
-#import generateheatmap as Heatmap
+import generateheatmap as Heatmap
 import generateNetwork as Network
 import numpy as np
 import plotly.tools
@@ -24,105 +24,7 @@ import scipy.spatial as sp, scipy.cluster.hierarchy as hc
 import seaborn as sns; sns.set(color_codes=True)
 from matplotlib import rcParams
 
-
-def Heatmap(mtx,deg_names,pag_ids,**kwargs):
-    plt.figure(figsize=(5,5))
-    # parameters in the heatmap setting 
-    width_ratio = 1
-    annotationSize = 6
-    font_size = 12
-    rowCluster = False
-    colCluster = False
-    
-    if 'width_ratio' in kwargs.keys():
-        width_ratio = kwargs['width_ratio']      
-    if 'annotationSize' in kwargs.keys():
-        annotationSize = kwargs['annotationSize']
-    if 'rowCluster' in kwargs.keys():
-        rowCluster = kwargs['rowCluster']            
-    if 'colCluster' in kwargs.keys():
-        colCluster = kwargs['colCluster']
-
-    if deg_names.size > 1:
-        # {‘ward’, ‘complete’, ‘average’, ‘single’}
-        col_linkage = hc.linkage(sp.distance.pdist(mtx.T), method='average')
-        row_linkage = hc.linkage(sp.distance.pdist(mtx), method='average')
-        
-    plt.figure(figsize=(5,5))
-    # load the color scale using the cm
-    #top = cm.get_cmap('Blues_r', 56)
-    bottom = cm.get_cmap('Reds', 56)
-    newcolors = np.vstack(
-                            (
-                                #top(np.linspace(0, 1, 56)),
-                                ([[0,0,0,0.1]]),
-                                bottom(np.linspace(0, 1, 56))
-                            )
-                         )
-    newcmp = ListedColormap(newcolors, name='RedBlue')
-    # set the balance point of the expression to 0
-    f_max = np.max(mtx)
-    f_min = np.min(mtx)
-    
-    if(abs(f_max)>abs(f_min)):
-        Bound=abs(f_max)
-    else:
-        Bound=abs(f_min)
-       
-    expMtxsDF = pd.DataFrame(mtx)
-    expMtxsDF.columns = deg_names
-    expMtxsDF.index = pag_ids
-    
-    #print(rowCluster == True and int(deg_names.size) > 1)
-    #print(int(deg_names.size))
-    if(rowCluster == True and colCluster == True and int(deg_names.size) > 1): 
-        g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,col_linkage=col_linkage,row_linkage=row_linkage,  yticklabels=True,
-                      annot=True,annot_kws={"size": annotationSize})        
-    
-    elif(rowCluster == True and int(deg_names.size) > 1): 
-        g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,col_cluster=False,row_linkage=row_linkage, yticklabels=True,
-                      annot=True,annot_kws={"size": annotationSize})
-    elif(colCluster == True and int(deg_names.size) > 1): 
-        g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,col_linkage=col_linkage,row_cluster=False,  yticklabels=True,
-                      annot=True,annot_kws={"size": annotationSize})  
-    else:
-        if int(deg_names.size) == 1:
-            expMtxsDF = expMtxsDF.sort_values(by=list(deg_names), ascending=False)
-        g = sns.clustermap(expMtxsDF,cmap=newcmp,vmax=Bound,vmin=0,row_cluster=False,col_cluster=False,  yticklabels=True,
-                      annot=True,annot_kws={"size": annotationSize})  
-    #plt.subplots_adjust(top=0.9) # make room to fit the colorbar into the figure
-    ### rotation of labels of x-axis and y-axis
-    plt.setp(g.ax_heatmap.yaxis.get_majorticklabels(), rotation=0, fontsize= font_size)
-    plt.setp(g.ax_heatmap.xaxis.get_majorticklabels(), rotation=90, fontsize= font_size-2)
-    hm = g.ax_heatmap.get_position()
-    scale_factor = len(pag_ids)/40
-    if scale_factor <  0.5:
-        scale_factor = 0.5
-    #max_content_length = (40/max([len(pag) for pag in pag_ids]))
-    #if max_content_length >10:
-    #    max_content_length = 10
-    #width_ratio = width_ratio * max_content_length * int(deg_names.size**2)
-    #if scale_factor<3 or scale_factor>7:
-    #    width_ratio = width_ratio *1.5
-    # to change the legends location
-    g.ax_heatmap.set_position([hm.x0*scale_factor, hm.y0*scale_factor, hm.width*width_ratio*scale_factor, hm.height*scale_factor])
-    col = g.ax_col_dendrogram.get_position()
-    g.ax_col_dendrogram.set_position([col.x0*scale_factor, col.y0*scale_factor, col.width*width_ratio*scale_factor, col.height*0.5]) #
-    row = g.ax_row_dendrogram.get_position()
-    g.ax_row_dendrogram.set_position([row.x0*scale_factor, row.y0*scale_factor, row.width*scale_factor, row.height*scale_factor]) #
-    ### color bar position and title ref: https://stackoverflow.com/questions/67909597/seaborn-clustermap-colorbar-adjustment
-    ### color bar position adjustment
-    x0, _y0, _w, _h = g.cbar_pos
-    g.ax_cbar.set_position([x0, _y0*scale_factor+0.1, row.width*scale_factor, 0.05])
-    g.ax_cbar.set_title('-log2 FDR')        
-    bottom, top = g.ax_heatmap.get_ylim()
-    plt.rcParams["axes.grid"] = False 
-    #plt.show()
-    
-    return(plt,g)
-
-
-
+# color in hex_map format
 colorUnit = 56
 top = cm.get_cmap('Blues_r', colorUnit)
 bottom = cm.get_cmap('Reds', colorUnit)
@@ -160,7 +62,7 @@ def get_table_download_link(df, **kwargs):
     in:  dataframe
     out: href string
     """
-    csv = df.to_csv(index=False, sep ='\t')
+    csv = df.to_csv(index=True, sep ='\t')
     b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
     prefix = "Download txt file for "
     if("fileName" in kwargs.keys()):
@@ -253,8 +155,11 @@ def run_force_layout(G):
 
 st.header('Section 1 out of 4: Show the conditions of samples')
 treatment_data = load_treatment_data()
+if 'Sample' in treatment_data.columns:
+    treatment_data.set_index('Sample', inplace=True)
 st.table(treatment_data)
-st.markdown(get_table_download_link(pd.DataFrame(treatment_data), fileName = " "+workingdir+' sample description'), unsafe_allow_html=True)  
+
+st.markdown(get_table_download_link(treatment_data, fileName = " "+workingdir+' sample description'), unsafe_allow_html=True)  
 
 st.header('Section 2 out of 4: Parse DEG Results')
 st.markdown("These results are from a differential gene expression (DEG) analysis performed with a custom DESeq2-based pipeline on RNAseq data located in the *Omics Data Repository*.")
@@ -389,7 +294,7 @@ for pag_idx in range(0,len(pag_ids)):
             mtx[pag_idx,name_idx]=PAG_val[deg_names[name_idx]+pag_ids[pag_idx]]
 
 
-orderExpect = treatment_data['Sample'].tolist()[0:]
+orderExpect = treatment_data.index.tolist()[0:]
 orderIdx = [sampleNames.index(i) for i in orderExpect]
 #st.write([len(pag_id) for pag_id in pag_ids])
 
@@ -398,7 +303,7 @@ width_ratio_heatmap = st.slider('Width ratio of heatmap (increase to widen the h
 ### heatmap ###
 heatmapBtn = st.button("Generate the heatmap")
 if heatmapBtn == True:
-    (plt,g) = Heatmap(np.array(mtx)[::,orderIdx]
+    (plt,g) = Heatmap.generateHeatmap(np.array(mtx)[::,orderIdx]
                               ,np.array(deg_names)[orderIdx]
                               ,pag_ids
                               ,rowCluster=True
