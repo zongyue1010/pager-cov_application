@@ -6,6 +6,18 @@ git add .
 git commit -m "ok"
 git push heroku main
 
+
+echo "" >.gitignore
+# https://git-scm.com/docs/gitignore
+./.ipynb_checkpoints/*
+./__pycache__/*
+./data_summary.xlsx
+./heroku_guide.txt
+./release note.txt
+./ppg2008.csv
+./test.ipynb
+
+
 # unset heroku buildback
 heroku config:unset BUILDPACK_URL
 
