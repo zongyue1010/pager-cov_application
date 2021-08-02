@@ -9,6 +9,14 @@ git push heroku main
 # unset heroku buildback
 heroku config:unset BUILDPACK_URL
 
+# git ai.med PAGER-CoV_Run
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add aimed https://github.com/aimed-uab/PAGER-COV_RUN.git
+git push -u aimed main
+
 # git initialize
 git init
 git add README.md
