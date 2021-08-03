@@ -1,7 +1,7 @@
-./.ipynb_checkpoints/*
-./__pycache__/*
-./data_summary.xlsx
-./heroku_guide.txt
-./release note.txt
-./ppg2008.csv
-./test.ipynb
+.ipynb_checkpoints/*
+__pycache__/*
+data_summary.xlsx
+heroku_guide.txt
+release note.txt
+ppg2008.csv
+test.ipynb
