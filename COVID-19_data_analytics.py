@@ -430,7 +430,9 @@ tuple(pag_ids)
     )
 
 if PAGid:
-    st.write("For the "+ str(PAGid)+"'s gene information in the selected PAG.")
+    ID_only = re.sub("([A-Z0-9]+)_[^_]*","\\1",str(PAGid))
+    link = "For the selected PAG "+ str(PAGid)+"'s gene information. (http://discovery.informatics.uab.edu/PAGER-COV/index.php/geneset/view/"+ID_only+")"
+    st.markdown(link, unsafe_allow_html=True)
     PAGid=re.sub("_[^_]+","",PAGid)
     geneInt=run_pager_int(PAGid)
     geneRanked=pag_ranked_gene(PAGid)
