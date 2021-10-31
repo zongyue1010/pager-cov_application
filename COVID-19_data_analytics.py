@@ -127,6 +127,28 @@ def generateheatmap(mtx,deg_names,pag_ids,**kwargs):
     plt.rcParams["axes.grid"] = False       
     return(plt)
 
+def barplot(**kwargs):
+    # gene barplots #
+    fig, ax = plt.subplots(figsize=(5,5))
+    #ax.set_xticks(index)
+    #ax.set_xticklabels(df1.columns)
+    x = kwargs["x"] if "x" in kwargs.keys() else [""]
+    y = kwargs["y"] if "y" in kwargs.keys() else [""]
+    error = kwargs["error"] if "error" in kwargs.keys() else [""]
+    plt.bar(
+        x, 
+        y, 
+        yerr=error, 
+        capsize=10
+    )
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.set_title(selectGene+" expression")
+    ax.set_ylabel('log2 fold change', color='black')
+    plt.xticks(rotation=90)
+    plt.tight_layout()
+    plt.show()
+    return(plt)
 
 # color in hex_map format
 colorUnit = 56
@@ -409,6 +431,7 @@ width_ratio_heatmap = st.slider('Width ratio of heatmap (increase to widen the h
 
 ### heatmap ###
 heatmapBtn = st.button("Generate the heatmap")
+
 if heatmapBtn == True:
     plt = generateheatmap(np.array(mtx)#[::,orderIdx]
                               ,np.array(deg_names)#[orderIdx]
@@ -450,6 +473,7 @@ if PAGid:
     st.write(geneRanked)
     st.markdown(get_table_download_link(geneRanked, fileName = " "+workingdir+" "+str(PAGid)), unsafe_allow_html=True) 
     
+    
     for gene_idx in range(0,geneRanked.shape[0]):
 
         gene = geneRanked.iloc[gene_idx,]
@@ -490,7 +514,8 @@ if PAGid:
     #     "selected sample",
     #     sampleNames,key='network')
     colorMap = dict()
-    
+
+    DataEset = pd.DataFrame()
     #if SampleNameButton in [i[0] for i in degs]:    
         #idx=[i[0] for i in degs].index(SampleNameButton)
     for idx in orderIdx:        
@@ -517,7 +542,9 @@ if PAGid:
         DataE=pd.DataFrame(expInNetworkArrSorted)
         DataE.rename(columns={0:'symbol',1:'log2FC',2:'S.E.'},inplace=True)
         st.write(DataE)
-        
+        # add data expression to dataframe
+        DataE['sample'] = sampleName
+        DataEset = DataEset.append(DataE)        
         if np.size(np.array(expInNetwork))>0:
             zeroInNetwork=[[i,'0','0'] for i in idx2symbol.values() if i not in np.array(expInNetwork)[:,0]]
         else:
@@ -566,6 +593,22 @@ if PAGid:
             st.markdown(get_table_download_link(pd.DataFrame(DataE), fileName = ' '+sampleName+' '+str(PAGid)+' data for gene expressions'), unsafe_allow_html=True)
         else:
             st.write("No expression.")
+    ### show barplot of the gene expression in the network ###
+    DataEset['log2FC'] = DataEset['log2FC'].astype("double")
+    selectGene = st.selectbox(
+        'Available Genes sorted by the log2 fold-change variance across all conditions',
+        tuple(
+            DataEset[['symbol','log2FC']].groupby(['symbol']).agg('var').fillna(0).sort_values('log2FC',ascending = False).index.values
+        )
+    )
+    if selectGene:
+        geneExp = DataEset.loc[DataEset['symbol'].isin([selectGene]),:]
+        plt = barplot(
+            x=geneExp['sample'].values,
+            y=geneExp['log2FC'].values.astype('double'),
+            error=geneExp['S.E.'].values.astype('double')
+        )
+        st.pyplot(plt)
     #else:
     #    st.write("You select nothing.")
 
