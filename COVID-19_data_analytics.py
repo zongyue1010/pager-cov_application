@@ -410,8 +410,8 @@ width_ratio_heatmap = st.slider('Width ratio of heatmap (increase to widen the h
 ### heatmap ###
 heatmapBtn = st.button("Generate the heatmap")
 if heatmapBtn == True:
-    plt = generateheatmap(np.array(mtx)[::,orderIdx]
-                              ,np.array(deg_names)[orderIdx]
+    plt = generateheatmap(np.array(mtx)#[::,orderIdx]
+                              ,np.array(deg_names)#[orderIdx]
                               ,pag_ids
                               ,rowCluster=True
                               ,colCluster = False
