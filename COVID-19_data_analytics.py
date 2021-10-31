@@ -257,27 +257,31 @@ def run_force_layout(G):
 #clinical_data_load_state.text('Loading data ... done!')
 #st.write(clinical_data)
 
-st.header('Section 1 out of 4: Show the conditions of samples')
 treatment_data = load_treatment_data()
 if 'Sample' in treatment_data.columns:
     treatment_data.set_index('Sample', inplace=True)
-st.table(treatment_data)
-
-st.markdown(get_table_download_link(treatment_data, fileName = " "+workingdir+' sample description'), unsafe_allow_html=True)  
-
-st.header('Section 2 out of 4: Parse DEG Results')
-st.markdown("These results are from a differential gene expression (DEG) analysis performed with a custom DESeq2-based pipeline on RNAseq data located in the *Omics Data Repository*.")
-#st.markdown("See source code for pipeline in *Source Code Repository* at https://gitlab.rc.uab.edu/gbm-pdx/deseq2-rnaseq.")
 degs = load_deg_results()
 
 sampleNames=[]
 for i in range(0,len(degs)):
     sampleNames.append(degs[i][0])
+    
+orderExpect = treatment_data.index.tolist()[0:]
+orderIdx = [sampleNames.index(i) for i in orderExpect]
+    
+
+st.header('Section 1 out of 4: Show the conditions of samples')
+st.table(treatment_data)
+st.markdown(get_table_download_link(treatment_data, fileName = " "+workingdir+' sample description'), unsafe_allow_html=True)  
+
+st.header('Section 2 out of 4: Parse DEG Results')
+st.markdown("These results are from a differential gene expression (DEG) analysis performed with a custom DESeq2-based pipeline on RNAseq data located in the *Omics Data Repository*.")
+#st.markdown("See source code for pipeline in *Source Code Repository* at https://gitlab.rc.uab.edu/gbm-pdx/deseq2-rnaseq.")
 
 if st.checkbox('Show DEG results table', value=True):
     SampleNameButton1 = st.radio(
          "selected sample",
-         sampleNames,key='DEG')
+         [sampleNames[order] for order in orderIdx],key='DEG')
     if SampleNameButton1 in [i[0] for i in degs]:
         idx=[i[0] for i in degs].index(SampleNameButton1)
         deg=degs[idx]
@@ -322,8 +326,8 @@ pag_ids=[]
 pags=[]
 PAG_val=dict()
 # Remove nan from gene list.
-
-for deg in degs:
+for idx in orderIdx:
+    deg = degs[idx]
     deg_name=deg[0]
     deg_names.append(deg_name)
     deg_results=deg[1]
@@ -398,8 +402,7 @@ for pag_idx in range(0,len(pag_ids)):
             mtx[pag_idx,name_idx]=PAG_val[deg_names[name_idx]+pag_ids[pag_idx]]
 
 
-orderExpect = treatment_data.index.tolist()[0:]
-orderIdx = [sampleNames.index(i) for i in orderExpect]
+
 #st.write([len(pag_id) for pag_id in pag_ids])
 
 width_ratio_heatmap = st.slider('Width ratio of heatmap (increase to widen the heatmap)', 0.1, 5.0, 1.0, 0.1)
@@ -502,7 +505,7 @@ if PAGid:
            )
         st.write("Sample:"+sampleName)
         deg_results=deg[1]
-        genesExp = [x for x in deg_results[['symbol','log2FoldChange']].values.tolist() if str(x[0]) != 'nan']
+        genesExp = [x for x in deg_results[['symbol','log2FoldChange','lfcSE']].values.tolist() if str(x[0]) != 'nan']
 
         # expression data in network
         expInNetwork=np.array(genesExp)[np.logical_or.reduce([np.array(genesExp)[:,0] == x for x in idx2symbol.values()])].tolist()
@@ -512,13 +515,13 @@ if PAGid:
         expInNetworkArr = np.array(expInNetwork)
         expInNetworkArrSorted = np.array(sorted(expInNetworkArr,key = lambda expInNetworkArr:np.float64(expInNetworkArr[1]), reverse=True))
         DataE=pd.DataFrame(expInNetworkArrSorted)
-        DataE.rename(columns={0:'symbol',1:'log2FC'},inplace=True)
+        DataE.rename(columns={0:'symbol',1:'log2FC',2:'S.E.'},inplace=True)
         st.write(DataE)
         
         if np.size(np.array(expInNetwork))>0:
-            zeroInNetwork=[[i,'0'] for i in idx2symbol.values() if i not in np.array(expInNetwork)[:,0]]
+            zeroInNetwork=[[i,'0','0'] for i in idx2symbol.values() if i not in np.array(expInNetwork)[:,0]]
         else:
-            zeroInNetwork=[[i,'0'] for i in idx2symbol.values()]
+            zeroInNetwork=[[i,'0','0'] for i in idx2symbol.values()]
         for i in zeroInNetwork:
             expInNetwork.append(i)
             
