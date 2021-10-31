@@ -496,7 +496,7 @@ if PAGid:
               node={'labelProperty':'label',"strokeColor": "black"},
               #, link={'labelProperty': 'label', 'renderLabel': True}
               link={'color': "#d3d3d3"},
-                        key="agraph_"+sampleName
+              key="agraph_"+sampleName
            )
         st.write("Sample:"+sampleName)
         deg_results=deg[1]
@@ -552,9 +552,10 @@ if PAGid:
                             ) # includes **kwargs
             edges = [Edge(source=i, label="int", target=j,color="#d3d3d3") for (i,j) in X.edges] # includes **kwargs  type="CURVE_SMOOTH"
             
-            return_value = agraph(nodes=nodes, 
-                          edges=edges, 
-                          config=config)
+            return_value = agraph(
+                nodes=nodes, 
+                edges=edges, 
+                config=config)
             #agraph(list(idx2symbol.values()), (PPI), config)
             st.markdown(get_table_download_link(pd.DataFrame(PPI), fileName = ' '+sampleName+' '+str(PAGid)+' data for interactions'), unsafe_allow_html=True)
             st.markdown(get_table_download_link(pd.DataFrame(DataE), fileName = ' '+sampleName+' '+str(PAGid)+' data for gene expressions'), unsafe_allow_html=True)
