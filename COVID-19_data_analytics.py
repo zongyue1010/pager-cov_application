@@ -445,6 +445,8 @@ if PAGid:
     geneRanked['RP_SCORE'] = geneRanked['RP_SCORE'].astype(float)
     geneRanked['node_size'] = geneRanked['RP_SCORE'] *4
     st.write(geneRanked)
+    st.markdown(get_table_download_link(geneRanked, fileName = " "+workingdir+" "+str(PAGid)), unsafe_allow_html=True) 
+    
     for gene_idx in range(0,geneRanked.shape[0]):
 
         gene = geneRanked.iloc[gene_idx,]
